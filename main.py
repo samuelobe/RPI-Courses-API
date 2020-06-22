@@ -9,7 +9,7 @@ from collections import defaultdict
 
 def get_courses():
 
-    csvfile = open('/tmp/data.csv', 'w')
+    temp_csvfile = open('/tmp/data.csv', 'w')
 
     # The webpage URL whose table we want to extract
     url = 'https://sis.rpi.edu/reg/zs20200501.htm'
@@ -32,10 +32,10 @@ def get_courses():
 
     time.sleep(1)
 
-    csvfile = open('/tmp/data.csv', 'r')
+    temp_csvfile = open('/tmp/data.csv', 'r')
 
     # Open csvfile and convert file to a list of lists
-    r = csv.reader(csvfile)
+    r = csv.reader(temp_csvfile)
     csv_lines = list(r)
     length = len(csv_lines)
 
@@ -50,9 +50,8 @@ def get_courses():
     csv_lines.remove(csv_lines[0])
     csv_lines.remove(csv_lines[0])
 
-
     key_tuple = ('CRN Course-Sec', 'Course Title', 'Class Type', 'Credit Hrs', 'Gr Tp',
-                  'Class Days', 'Start Time', 'End Time', 'Instructor', 'Max Enrl', 'Enrl', 'Sts Rmng')
+                 'Class Days', 'Start Time', 'End Time', 'Instructor', 'Max Enrl', 'Enrl', 'Sts Rmng')
 
     for line in csv_lines:
         if 'NOTE:' in line[1]:
@@ -61,6 +60,15 @@ def get_courses():
             print(line)
 
 
+
+    fields = ['CRN Course-Sec', 'Course Title', 'Class Type', 'Credit Hrs', 'Gr Tp',
+                 'Class Days', 'Start Time', 'End Time', 'Instructor', 'Max Enrl', 'Enrl', 'Sts Rmng']
+
+    with open('data.csv', 'a') as f:
+        writer = csv.writer(f)
+        writer.writerow(fields)
+        for line in csv_lines:
+            writer.writerow(line)
 
 
 if __name__ == "__main__":
